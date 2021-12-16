@@ -8,7 +8,7 @@ import com.product.demo.entities.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long>{
 
-	Optional<Product> findByGuid(String guid);
+	Optional<Product> findByBarcode(String barcode);
 
 
 }

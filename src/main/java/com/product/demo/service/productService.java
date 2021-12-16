@@ -11,6 +11,9 @@ import com.product.demo.entities.Product;
 import com.product.demo.repository.ProductRepository;
 import com.product.demo.service.exception.ObjectNotFound;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Service
 public class productService {
 
@@ -24,65 +27,37 @@ public class productService {
 		return this.repository.findAll();
 	}
 
-	public Product findByGuid(String guid) {
-		if(Strings.isEmpty(guid)) {
-			throw new IllegalArgumentException("Guid nao pode ser nulo");
-		}
-		return repository.findByGuid(guid).orElseThrow(() -> new ObjectNotFound("Objeto nao encontrado"));
+	public Product findByBarcode(String barcode) {
+		return repository.findByBarcode(barcode).orElseThrow(() -> new ObjectNotFound("Objeto nao encontrado"));
 	}
 
-	public void validation(String name, String barcode, String description, Double price) {
-		if(Strings.isEmpty(name)) {
-			throw new IllegalArgumentException("Name nao pode ser nullo");
-		}
-		if(Strings.isEmpty(description)) {
-			throw new IllegalArgumentException("Description nao pode ser nullo");
-		}
-		if(Strings.isEmpty(barcode)) {
-			throw new IllegalArgumentException("Barcode nao pode ser nullo");
-		}
-		if(price == null) {
-			throw new IllegalArgumentException("price nao pode ser nullo");
-		}
-	}
 
-	public Product save(String name, String barcode, String description, Double price) {
-
-		this.validation(name, barcode, description, price);
+	public Product save(String name, String description, Double price, Integer quantity) {
 
 		Product product = new Product();
-		product.setGuid(UUID.randomUUID().toString());
+		product.setBarcode(UUID.randomUUID().toString());
 		product.setName(name);
 		product.setDescription(description);
-		product.setBarcode(barcode);
 		product.setPrice(price);
+        product.setQuantity(quantity);
 		return repository.save(product);
 	}
 
-	public void validationGuid(String guid) {
-		if(Strings.isEmpty(guid)) {
-			throw new IllegalArgumentException("guid nao pode ser nulo");
-		}
-	}
 
-	public void delete(String guid) {
-        if(Strings.isEmpty(guid)){
-            throw new IllegalArgumentException("guid nao pode ser nulo");
-        }
-		this.validationGuid(guid);
-        Product product = repository.findByGuid(guid).orElseThrow( ()-> new IllegalArgumentException("Product nao encontrado"));
+	public void delete(String barcode) {
+
+        Product product = repository.findByBarcode(barcode).orElseThrow( ()-> new IllegalArgumentException("Product nao encontrado"));
         this.repository.delete(product);
 	}
 
-	public Product update(String guid, String name, String barcode, String description, Double price) {
-		this.validationGuid(guid);
+	public Product update(String barcode, String name, String description, Double price, Integer quantity) {
 
-		Product product = this.repository.findByGuid(guid).orElseThrow(()-> new ObjectNotFound("Product nao encontrado"));
+		Product product = this.repository.findByBarcode(barcode).orElseThrow(()-> new ObjectNotFound("Product nao encontrado"));
 
 		product.setName(name);
 		product.setDescription(description);
-		product.setBarcode(barcode);
 		product.setPrice(price);
+        product.setQuantity(quantity);
 
 		return repository.save(product);
 	}

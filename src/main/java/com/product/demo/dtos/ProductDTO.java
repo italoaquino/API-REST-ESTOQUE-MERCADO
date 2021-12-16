@@ -6,29 +6,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Builder
 @Getter
 @Setter
 public class ProductDTO {
 
-    private String guid;
-
+    @NotBlank
     private String name;
 
     private String barcode;
 
+    @NotBlank
+    @Size(min = 5, max = 50)
     private String description;
 
-    private double price;
+    @NotNull
+    private Double price;
+
+    @NotNull
+    private Integer quantity;
 
     public static ProductDTO toDTO(Product product) {
         return ProductDTO.builder()
-            .guid(product.getGuid())
+            .barcode(product.getBarcode())
             .name(product.getName())
             .barcode(product.getBarcode())
             .description(product.getDescription())
             .price(product.getPrice())
+            .quantity(product.getQuantity())
             .build();
     }
 }

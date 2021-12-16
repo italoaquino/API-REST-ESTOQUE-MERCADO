@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity
@@ -21,15 +22,17 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String guid;
+    @NotBlank
+    private String barcode;
 
 	@NotBlank
 	private String name;
 
-	@NotBlank
-	private String barcode;
+    @NotNull
+    private Integer quantity;
 
 	@NotBlank
+    @Size(min = 10, max = 50)
 	private String description;
 
 	@NotNull
